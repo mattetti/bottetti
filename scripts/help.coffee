@@ -53,7 +53,8 @@ helpContents = (name, commands) ->
 module.exports = (robot) ->
   robot.respond /help\s*(.*)?$/i, (msg) ->
     cmds = robot.helpCommands()
-
+    reply_to =  msg.message.user.name
+    
     if msg.match[1]
       cmds = cmds.filter (cmd) ->
         cmd.match new RegExp(msg.match[1], 'i')
@@ -63,7 +64,9 @@ module.exports = (robot) ->
     unless robot.name.toLowerCase() is 'hubot'
       emit = emit.replace /hubot/ig, robot.name
 
-    msg.send emit
+    #msg.send emit
+    msg.send "Sending help to " + reply_to + " via PM"
+    robot.adapter.reply { user: { reply_to: reply_to, name: reply_to }}, emit
 
   robot.router.get '/hubot/help', (req, res) ->
     cmds = robot.helpCommands().map (cmd) ->
