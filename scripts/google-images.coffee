@@ -10,7 +10,11 @@
 module.exports = (robot) ->
   robot.respond /(image|img)( me)? (.*)/i, (msg) ->
     imageMe msg, msg.match[3], (url) ->
-      msg.send "you asked for " + msg.match[3] + " here you go: \n" + url
+      msg.send "you asked for '" + msg.match[3] + "', here you go: \n" + url
+
+  robot.respond /face( me)? (.*)/i, (msg) ->
+    imageMe msg, msg.match[2], false, true, (url) ->
+      msg.send "you asked for '" + msg.match[2] + "' face, here you go: \n" + url
 
   robot.respond /animate( me)? (.*)/i, (msg) ->
     imageMe msg, msg.match[2], true, (url) ->
