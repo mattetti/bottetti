@@ -66,14 +66,17 @@ module.exports = (robot) ->
 
     #msg.send emit
     msg.send "Sending help to " + reply_to + " via PM"
-    controlledDelivery ->
-      cmd = cmds.shift()
+    cmdsToSend = cmds.slice(0);
+    # Avoid flooding by delaying the delivery
+    controlledDelivery = ->
+      cmd = cmdsToSend.shift()
       if cmd
         robot.adapter.reply { user: { reply_to: reply_to, name: reply_to }}, cmd.replace(/hubot/ig, robot.name)
       else
-        clearInterval(replyInterval)
+        console.log("Done sending help to ", reply_to)
+        clearInterval(delayedInterval)
 
-    clearInterval = setInterval(controlledDelivery, 200)
+    delayedInterval = setInterval(controlledDelivery, 300)
 
   robot.router.get '/hubot/help', (req, res) ->
     cmds = robot.helpCommands().map (cmd) ->
