@@ -66,8 +66,8 @@ module.exports = (robot) ->
 
     #msg.send emit
     msg.send "Sending help to " + reply_to + " via PM"
-    #cmds.forEach (cmd) ->
-    robot.adapter.reply { user: { reply_to: reply_to, name: reply_to }}, cmds[0]
+    cmds.forEach (cmd) ->
+      robot.adapter.reply { user: { reply_to: reply_to, name: reply_to }}, cmd.replace(/hubot/ig, robot.name)
 
   robot.router.get '/hubot/help', (req, res) ->
     cmds = robot.helpCommands().map (cmd) ->
