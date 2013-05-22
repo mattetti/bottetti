@@ -66,8 +66,14 @@ module.exports = (robot) ->
 
     #msg.send emit
     msg.send "Sending help to " + reply_to + " via PM"
-    cmds.forEach (cmd) ->
-      robot.adapter.reply { user: { reply_to: reply_to, name: reply_to }}, cmd.replace(/hubot/ig, robot.name)
+    controlledDelivery ->
+      cmd = cmds.shift()
+      if cmd
+        robot.adapter.reply { user: { reply_to: reply_to, name: reply_to }}, cmd.replace(/hubot/ig, robot.name)
+      else
+        clearInterval(replyInterval)
+
+    clearInterval = setInterval(controlledDelivery, 200)
 
   robot.router.get '/hubot/help', (req, res) ->
     cmds = robot.helpCommands().map (cmd) ->
