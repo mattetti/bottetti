@@ -59,7 +59,7 @@ module.exports = (robot) ->
 
   robot.respond /(return|back) ?(.*)?/i, (msg) ->
     hb_status = new Status robot
-    hb_status.update_away msg.message.user.name, null
+    hb_status.remove_status msg.message.user.name
     msg.send msg.message.user.name + " has returned."
 
   robot.hear /./i, (msg) ->
